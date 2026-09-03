@@ -6,6 +6,15 @@ LUMA is a personal AI chat application focused on a simple, modern chat experien
 
 LUMA is not intended to outperform ChatGPT as a general-purpose AI. Its main advantage is providing one clean interface where the user can switch between multiple models through OpenRouter.
 
+## Product principles
+
+- Model switching is the primary differentiator.
+- Keep the interface simple and polished.
+- Prefer useful product behavior over technology demonstrations.
+- Preserve conversation history and make editing/regeneration branch-aware.
+- Design for desktop, tablet, and mobile from the beginning.
+- Keep API credentials out of source control.
+
 ## Planned features
 
 - Modern, minimal black-and-white UI with rounded components
@@ -42,7 +51,20 @@ Models are stored internally by model ID and displayed with user-friendly names 
 - `google/gemma-4-26b-a4b-it:free`
 - `nvidia/nemotron-3-super-120b-a12b:free`
 
-The registry should remain configurable so models can be replaced when provider availability or limits change.
+The registry must remain configurable because provider availability, capabilities, and limits can change.
+
+See [`docs/MODEL_REGISTRY.md`](docs/MODEL_REGISTRY.md).
+
+## Design documentation
+
+- [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) - complete product and feature specification
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) - application architecture and request/branching flow
+- [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) - logical Firebase/application data model
+- [`docs/UI_SPEC.md`](docs/UI_SPEC.md) - responsive UI/UX specification
+- [`docs/MODEL_REGISTRY.md`](docs/MODEL_REGISTRY.md) - model registry and switching design
+- [`docs/SECURITY.md`](docs/SECURITY.md) - security requirements and threat priorities
+- [`docs/TECHNICAL_DECISIONS.md`](docs/TECHNICAL_DECISIONS.md) - decisions that constrain scope and architecture
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) - phased implementation roadmap
 
 ## Planned architecture
 
@@ -62,4 +84,4 @@ LUMA is intended for personal use. API credentials should never be hard-coded in
 
 🚧 **In development**
 
-This repository currently contains the product plan and project specification. Implementation will be added incrementally.
+The repository now contains the product specification, architecture, data model, UI specification, security requirements, technical decisions, model registry, and implementation roadmap. Implementation will be added incrementally.
