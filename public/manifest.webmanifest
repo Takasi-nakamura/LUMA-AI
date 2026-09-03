@@ -1,7 +1,9 @@
 {
-  "name": "Luma",
+  "name": "Luma AI",
   "short_name": "Luma",
-  "start_url": "/",
+  "description": "A simple multi-model AI workspace.",
+  "start_url": "/LUMA-AI/",
+  "scope": "/LUMA-AI/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#111111",
