@@ -14,6 +14,7 @@ export function saveSettings(settings) { localStorage.setItem(SETTINGS, JSON.str
 function systemPrompt(settings) {
   return [
     'You are Luma, a helpful AI assistant. Answer in Japanese unless the user requests another language.',
+    'Use Markdown when it improves readability. When providing HTML or SVG, put complete code in a fenced code block.',
     settings.customInstructions?.trim(),
   ].filter(Boolean).join('\n\n');
 }
@@ -22,18 +23,24 @@ export async function askOpenRouter({ messages, model, settings, attachments = [
   const key = getApiKey();
   if (!key) throw new Error('OpenRouter APIキーを設定してください。設定 → API から入力できます。');
 
-  const content = [];
+  const last = messages[messages.length - 1];
+  const multimodal = [];
   for (const item of attachments) {
-    if (item.kind === 'image' && item.dataUrl) content.push({ type: 'image_url', image_url: { url: item.dataUrl } });
+    if (item.kind === 'image' && item.dataUrl) {
+      multimodal.push({ type: 'image_url', image_url: { url: item.dataUrl } });
+    }
+    if (item.extractedText) {
+      multimodal.push({ type: 'text', text: `\n\n【添付ファイル: ${item.name}】\n${item.extractedText}` });
+    }
   }
-  content.push({ type: 'text', text: messages[messages.length - 1]?.content || '' });
+  multimodal.push({ type: 'text', text: last?.content || '' });
 
   const payload = {
     model: model || MODELS[0].id,
     messages: [
       { role: 'system', content: systemPrompt(settings) },
       ...messages.slice(0, -1),
-      { role: 'user', content: content.length === 1 ? content[0].text : content },
+      { role: 'user', content: multimodal.length === 1 ? multimodal[0].text : multimodal },
     ],
     temperature: 0.7,
   };
@@ -56,5 +63,7 @@ export async function askOpenRouter({ messages, model, settings, attachments = [
 }
 
 export function extractText(response) {
-  return response?.choices?.[0]?.message?.content || '回答を取得できませんでした。';
+  const content = response?.choices?.[0]?.message?.content;
+  if (Array.isArray(content)) return content.map(x => x?.text || '').join('');
+  return content || '回答を取得できませんでした。';
 }
